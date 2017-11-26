@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +15,9 @@ class MyGraph{
 	
 	//create a list of all 3 clusters
 	List<Map<String, List<Edge>>> clusters = new ArrayList<>();
+	int counter = 0;
+	
+	String[] test = new String[3];
 		
 	class Edge{
 		int w;
@@ -38,6 +45,43 @@ class MyGraph{
 		
 	
 	public void run(){
+		
+		
+		 
+		try{
+		    FileInputStream fstream = new FileInputStream("graph.txt");
+		          DataInputStream in = new DataInputStream(fstream);
+		          BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		          String strLine;
+		          while ((strLine = br.readLine()) != null)   {
+		        	  
+		        	  String[] tokens = strLine.split(" ");
+		        	  // Record record = new Record(tokens[0],tokens[1],tokens[2]);//process record , etc
+		        	  if(!tokens[0].equals("CLUSTER")){
+		        		  e = new ArrayList<>();
+			        	  for(int i = 1; i < tokens.length; i++){
+			        		  int weightFromFile = Integer.parseInt(tokens[i]);
+			        		  Edge e1 = new Edge(weightFromFile, tokens[i+1]);
+			        		  i++;
+			        	  }
+			        	  g.put(tokens[0], e);
+			        	  test[counter] = tokens[0];
+			        	  
+			        	  
+		        	  }else if(tokens[0].equals("CLUSTER")){
+		        		  clusters.add(g);
+		        		  g = new HashMap<>();
+		        		  counter++;
+		        	  }
+		        	  
+
+		   }
+		   in.close();
+		   }catch (Exception e){
+		     System.err.println("Error: " + e.getMessage());
+		   }
+		
+		/*
 		e = new ArrayList<>();
 		Edge e1 = new Edge(100, "Boston");
 		Edge e2 = new Edge(200, "Houston");
@@ -86,6 +130,7 @@ class MyGraph{
 		g.put("C4", e);
 		
 		clusters.add(g);
+		*/
 	}
 	
 	@Override
@@ -114,12 +159,15 @@ class MyGraph{
 		System.out.println("Edge visited: Chicago");
 		List<Edge> edgesList;
 		
+		
 		//need to change condition to number of edges
 		for(int k = 0; k < clusters.size(); k++){
-			
-			
-			for(int i = 0; i < g.size() * 10; i++){
+			if(clusters.get(k).get(cityToLookup)== null)
+				break;
+			for(int i = 0; i < 8; i++){
 				edgesList = clusters.get(k).get(cityToLookup);
+				if(clusters.get(k).get(cityToLookup)== null)
+					break;
 				for(int j = 0; j < edgesList.size(); j++){
 						if(edgesList.get(j).getW() < minWeight && !edgesList.get(j).visited){
 							minWeight = edgesList.get(j).getW();
@@ -141,10 +189,17 @@ class MyGraph{
 			System.out.println("Cluster finished");
 			totalWeight = 0;
 			
-			cityToLookup = "C1";
+			try{
+				cityToLookup = test[k+1];
+			}catch(ArrayIndexOutOfBoundsException e){
+				break;
+			}
 		}		
 	}
+	
 }
+
+
 
 public class GraphTest{
 	public static void main(String[] args){
@@ -152,6 +207,7 @@ public class GraphTest{
 		g.run();
 		System.out.println(g.toString());
 		
+		System.out.print("Enter starting city: ");
 		Scanner kb = new Scanner(System.in);
 		String startingPoint = kb.nextLine();
 		g.findFirstGroup(startingPoint);
