@@ -2,11 +2,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 class MyGraph{
 	
 	List<Edge> e;
 	Map<String, List<Edge>> g = new HashMap<>();
+	
+	//create a list of all 3 clusters
+	List<Map<String, List<Edge>>> clusters = new ArrayList<>();
 		
 	class Edge{
 		int w;
@@ -55,7 +59,33 @@ class MyGraph{
 		e2 = new Edge(200, "Los Angeles");
 		g.put("Houston", e);
 		
+		clusters.add(g);
+		// -----------------------------------
+		//------------------------------------
+		g = new HashMap<>();
 		
+		e = new ArrayList<>();
+		e1 = new Edge(100, "C2");
+		e2 = new Edge(200, "C3");
+		g.put("C1", e);
+		
+		e = new ArrayList<>();
+		e1 = new Edge(400, "C1");
+		e2 = new Edge(300, "C3");
+		e3 = new Edge(100, "C4");
+		g.put("C2", e);
+		
+		e = new ArrayList<>();
+		e1 = new Edge(400, "C5");
+		e2 = new Edge(300, "C2");
+		g.put("C3", e);
+		
+		e = new ArrayList<>();
+		e1 = new Edge(100, "C1");
+		e2 = new Edge(200, "C2");
+		g.put("C4", e);
+		
+		clusters.add(g);
 	}
 	
 	@Override
@@ -72,35 +102,46 @@ class MyGraph{
 		
 	}
 	
-	public void findFirstGroup(){
+	public void findFirstGroup(String startingPoint){
 		
 		int minWeight = 999999;
 		int index = 0;
 		String cityToVisit = "";
-		String cityToLookup = "Chicago";
+		String cityToLookup = startingPoint;
+		int totalWeight = 0;
 		//get list of edges for first V then find lowest value
 		
 		System.out.println("Edge visited: Chicago");
 		List<Edge> edgesList;
 		
 		//need to change condition to number of edges
-		for(int i = 0; i < g.size() * 2; i++){
-			edgesList = g.get(cityToLookup);
-			for(int j = 0; j < edgesList.size(); j++){
-					if(edgesList.get(j).getW() < minWeight && !edgesList.get(j).visited){
-						minWeight = edgesList.get(j).getW();
-						index = j;
-						cityToVisit = edgesList.get(j).getV();	
+		for(int k = 0; k < clusters.size(); k++){
+			
+			
+			for(int i = 0; i < g.size() * 10; i++){
+				edgesList = clusters.get(k).get(cityToLookup);
+				for(int j = 0; j < edgesList.size(); j++){
+						if(edgesList.get(j).getW() < minWeight && !edgesList.get(j).visited){
+							minWeight = edgesList.get(j).getW();
+							index = j;
+							cityToVisit = edgesList.get(j).getV();
+							
+					}
+				}		
+			//set the index of the visited vertex to true and put the new list into the map
+				if(!edgesList.get(index).visited){
+					edgesList.get(index).visited = true;
+					totalWeight += edgesList.get(index).getW();
+					System.out.println("Edge visited: " + edgesList.get(index).v + " with weight of: " + totalWeight);
+					g.put(cityToLookup, edgesList);
+					cityToLookup = cityToVisit;
+					minWeight = 999999;
 				}
-			}		
-		//set the index of the visited vertex to true and put the new list into the map
-			if(!edgesList.get(index).visited){
-				edgesList.get(index).visited = true;
-				System.out.println("Edge visited: " + edgesList.get(index).v);
-				g.put(cityToLookup, edgesList);
-				cityToLookup = cityToVisit;
-				minWeight = 999999;
-			}
+		}
+			System.out.println("Cluster finished");
+			totalWeight = 0;
+			
+			cityToLookup = "C1";
 		}		
 	}
 }
@@ -110,6 +151,9 @@ public class GraphTest{
 		MyGraph g = new MyGraph();
 		g.run();
 		System.out.println(g.toString());
-		g.findFirstGroup();
+		
+		Scanner kb = new Scanner(System.in);
+		String startingPoint = kb.nextLine();
+		g.findFirstGroup(startingPoint);
 	}
 }
