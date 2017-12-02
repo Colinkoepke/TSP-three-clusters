@@ -81,73 +81,8 @@ class MyGraph{
 		   }catch (Exception e){
 		     System.err.println("Error: " + e.getMessage());
 		   }
-		
-		/*
-		e = new ArrayList<>();
-		Edge e1 = new Edge(100, "Boston");
-		Edge e2 = new Edge(200, "Houston");
-		g.put("Chicago", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(400, "Seattle");
-		e2 = new Edge(300, "Los Angeles");
-		Edge e3 = new Edge(100, "Houston");
-		g.put("Boston", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(400, "New York");
-		e2 = new Edge(300, "Houston");
-		g.put("Los Angeles", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(100, "Chicago");
-		e2 = new Edge(200, "Los Angeles");
-		g.put("Houston", e);
-		
-		clusters.add(g);
-		// -----------------------------------
-		//------------------------------------
-		g = new HashMap<>();
-		
-		e = new ArrayList<>();
-		e1 = new Edge(100, "C2");
-		e2 = new Edge(200, "C3");
-		g.put("C1", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(400, "C1");
-		e2 = new Edge(300, "C3");
-		e3 = new Edge(100, "C4");
-		g.put("C2", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(400, "C5");
-		e2 = new Edge(300, "C2");
-		g.put("C3", e);
-		
-		e = new ArrayList<>();
-		e1 = new Edge(100, "C1");
-		e2 = new Edge(200, "C2");
-		g.put("C4", e);
-		
-		clusters.add(g);
-		*/
 	}
-	
-	@Override
-	public String toString(){
-		String result = "";
 		
-		for(List<Edge> edge : g.values()){
-			for(int i = 0; i < edge.size(); i++){
-				result += "Connected to " + edge.get(i).getV() + " with a weight of " + edge.get(i).getW() + " ";
-			}
-			result += "\n";
-		}
-		return result;
-		
-	}
-	
 	public void findFirstGroup(String startingPoint, String endingPoint){
 		
 		int minWeight = 999999;
@@ -158,7 +93,6 @@ class MyGraph{
 		boolean end = false;
 		//get list of edges for first V then find lowest value
 		
-		System.out.println("Starting edge: " + startingPoint);
 		List<Edge> edgesList;
 		
 		
@@ -171,6 +105,7 @@ class MyGraph{
 			}
 			if(clusters.get(k).get(cityToLookup)== null || end)
 				break;
+			System.out.println("Visited City: " + cityToLookup);
 			for(int i = 0; i < 100; i++){
 				edgesList = clusters.get(k).get(cityToLookup);
 				if(clusters.get(k).get(cityToLookup)== null || end)
@@ -187,7 +122,7 @@ class MyGraph{
 				if(!edgesList.get(index).visited){
 					edgesList.get(index).visited = true;
 					totalWeight += edgesList.get(index).getW();
-					System.out.println("Edge visited: " + edgesList.get(index).v + " with weight of: " + totalWeight);
+					System.out.println("City visited: " + edgesList.get(index).v + " with a cost of: $" + edgesList.get(index).w);
 					if(cityToVisit.equals(endingPoint)){
 						end = true;
 						break;
@@ -204,6 +139,7 @@ class MyGraph{
 			//get next city to lookup based on cluster
 			try{
 				cityToLookup = test[k+1];
+				
 			}catch(ArrayIndexOutOfBoundsException e){
 				break;
 			}
@@ -220,7 +156,6 @@ class MyGraph{
 			boolean end = false;
 			//get list of edges for first V then find lowest value
 			
-			System.out.println("Starting edge: " + startingPoint);
 			List<Edge> edgesList;
 			
 			
@@ -233,6 +168,7 @@ class MyGraph{
 				}
 				if(clusters.get(k).get(cityToLookup)== null || end)
 					break;
+				System.out.println("Visited City: " + cityToLookup);
 				for(int i = 0; i < 100; i++){
 					edgesList = clusters.get(k).get(cityToLookup);
 					if(clusters.get(k).get(cityToLookup)== null || end)
@@ -305,7 +241,7 @@ public class GraphTest{
 	public static void main(String[] args){
 		MyGraph g = new MyGraph();
 		g.run();
-		System.out.println(g.toString());
+		//System.out.println(g.toString());
 		
 		System.out.print("Enter starting city: ");
 		Scanner kb = new Scanner(System.in);
@@ -318,6 +254,6 @@ public class GraphTest{
 			g.findFirstGroup(startingPoint, endingPoint);
 		else
 			g.rightToLeft(startingPoint, endingPoint);
-		System.out.println("Total cost from " + startingPoint + " to " + endingPoint + ": " + g.findTotal());
+		System.out.println("Total cost from " + startingPoint + " to " + endingPoint + ": $" + g.findTotal());
 	}
 }

@@ -1,15 +1,33 @@
-Chicago 100 Boston 200 Houston
-Boston 400 Seattle 300 LA 100 Houston
-LA 400 NY 300 Houston
-Houston 100 Chicago 200 LA
+LA 49 SanFrancisco 124 Phoenix
+SanFrancisco 84 Portland 56 LasVegas
+Portland 112 Seattle
+Seattle 88 SanFrancisco 119 Boise 130 LA
+Boise 100 LasVegas 112 SanFrancisco
+LasVegas 104 Phoenix 112 Seattle
+Phoenix 116 Albuquerque
+Denver 349 Bismarck
+Albuquerque 41 Denver 
+Bismarck 325 Boise
 CLUSTER
-C1 100 C2 200 C3
-C2 400 C1 300 C3 100 C4
-C3 400 C5 300 C2
-C4 100 C1 200 C2
+Lincoln 530 Wichita 335 Minneapolis
+Wichita 167 Austin
+Austin 85 NewOrleans
+Minneapolis 133 Milwaukee
+Milwaukee 134 Chicago 109 Indianapolis
+Chicago 86 Indianapolis
+Nashville 276 Louisville 139 NewOrleans
+NewOrleans 183 Wichita 144 Indianapolis
+Louisville 99 Chicago
+Indianapolis 180 Louisville 144 Nashville
 CLUSTER
-T1 100 T2 200 T3
-T2 400 T1 300 T3 100 T4
-T3 400 T5 300 T2
-T4 100 T1 200 T2
+Cincinnati 83 Atlanta 
+Atlanta 278 Charlotte 144 Miami
+Tampa 92 Atlanta 142 Charlotte
+Miami 77 Tampa
+Charlotte 99 DC
+DC 87 Boston 84 NewYorkCity 211 Philadelphia 
+Boston 82 NewYorkCity
+NewYorkCity 82 Concord
+Philadelphia 99 Boston 174 NewYorkCity
+Concord 99 Philadelphia
 CLUSTER
