@@ -240,7 +240,7 @@ class MyGraph{
 			}
 	}
 		
-	public boolean determineF(String startingPoint, String endingPoint){
+	public boolean determineDirection(String startingPoint, String endingPoint){
 		
 		//true is left to right
 		//false is right to left
@@ -282,8 +282,14 @@ public class GraphTest{
 		System.out.print("\nEnter ending city: ");
 		String endingPoint = kb.nextLine();
 		
-		if(g.determineF(startingPoint, endingPoint))
+		if(g.determineDirection(startingPoint, endingPoint)){
+			try{
 			g.leftToRight(startingPoint, endingPoint);
+			g.rightToLeft(endingPoint, startingPoint);
+			}catch(Exception e){
+				System.out.print("");
+			}
+		}
 		else
 			g.rightToLeft(startingPoint, endingPoint);
 		System.out.println("Total cost from " + startingPoint + " to " + endingPoint + ": $" + g.findTotal());
